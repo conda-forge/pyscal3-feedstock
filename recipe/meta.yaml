@@ -1,5 +1,5 @@
 {% set name = "pyscal3" %}
-{% set version = "3.1.5" %}
+{% set version = "3.1.6" %}
 
 package:
   name: {{ name|lower }}
@@ -7,7 +7,7 @@ package:
 
 source:
   url: https://github.com/pyscal/{{ name }}/archive/{{ version }}.tar.gz
-  sha256: 812a6e6891cc5d84b87ececc4a1c904ccda8f67eed74d041c0923457721c7abd
+  sha256: b64650ad4233c87d8d267d351f1785cc88dd18007f2e769f739aaa128414c424
 
 build:
   number: 0
