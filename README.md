@@ -11,7 +11,7 @@ Summary: faster and more efficient pyscal distribution
 
 Development: https://github.com/pyscal/pyscal3/
 
-Documentation: https://pyscal.org
+Documentation: https://v3.pyscal.org
 
 pyscal is a python module for the calculation of local
 atomic structural environments including Steinhardt's bond
