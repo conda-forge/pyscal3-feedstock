@@ -10,9 +10,8 @@ source:
   sha256: 69ca7b4f7ef9a220825bcdc807e3f63b79cd84902dce1522645f2a0752ed079f
 
 build:
-  number: 0
+  number: 1
   script: {{ PYTHON }} -m pip install . -vv
-  skip: true  # [py2k]
 
 requirements:
   build:
@@ -30,6 +29,7 @@ requirements:
     - pip
     - numpy
     - pybind11
+    - setuptools
   run:
     - python
     - pip
