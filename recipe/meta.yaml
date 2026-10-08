@@ -1,5 +1,5 @@
 {% set name = "pyscal3" %}
-{% set version = "3.3.2" %}
+{% set version = "4.1.0" %}
 
 package:
   name: {{ name|lower }}
@@ -7,58 +7,59 @@ package:
 
 source:
   url: https://github.com/pyscal/{{ name }}/archive/{{ version }}.tar.gz
-  sha256: 718b3f54d93957c6ee6793e59475b9ffe776da06375030938cbde3c364b794ac
+  sha256: 83dd6fa9a675a8c3babd6499f032ae6a5f4bba536ff0a6ac97018dc962308836
 
 build:
-  number: 1
-  script: {{ PYTHON }} -m pip install . -vv
+  number: 0
+  skip: true  # [py<310]
+  script: {{ PYTHON }} -m pip install . -vv --no-deps --no-build-isolation
 
 requirements:
   build:
     - python                                 # [build_platform != target_platform]
     - cross-python_{{ target_platform }}     # [build_platform != target_platform]
-    - numpy                                  # [build_platform != target_platform]
-    - pybind11                               # [build_platform != target_platform]
-    - python                                 # [build_platform != target_platform]
-    - cross-python_{{ target_platform }}     # [build_platform != target_platform]
-    - numpy                                  # [build_platform != target_platform]
+    - pybind11 >=2.12                        # [build_platform != target_platform]
     - {{ compiler('cxx') }}
     - {{ stdlib("c") }}
   host:
     - python
     - pip
-    - numpy
-    - pybind11
-    - setuptools
+    - setuptools >=64
+    - wheel
+    - pybind11 >=2.12
   run:
     - python
-    - pip
+    - numpy
+    - scipy >=1.15
     - ase
     - pyyaml
-    - pybind11
 
 test:
   imports:
     - pyscal3
+    - pyscal
+  requires:
+    - pip
   commands:
     - pip check
+    - python -c "from ase.build import bulk; import pyscal3; a = bulk('Cu', 'fcc', a=3.61, cubic=True).repeat(3); assert pyscal3.common_neighbor_analysis(a)['fcc'] == len(a)"
 
 about:
   home: https://pyscal.org
-  license: GPL-3.0
-  license_family: GPL
-  license_file: LICENSE
-  summary: faster and more efficient pyscal distribution
-
+  license: BSD-3-Clause AND MIT
+  license_family: BSD
+  license_file:
+    - LICENSE
+    - lib/matscipy-neighbours/LICENSE.md
+  summary: Calculation of local atomic structural environments from atomistic simulation data
   description: |
-    pyscal is a python module for the calculation of local 
-    atomic structural environments including Steinhardt's bond 
-    orientational order parameters [1] during post-processing 
-    of atomistic simulation data. The core functionality of 
-    pyscal is written in C++ with python wrappers using 
-    pybind11 which allows for fast calculations with possibilities 
-    for easy expansion in python.
-  doc_url: https://v3.pyscal.org
+    pyscal computes descriptors of the local atomic structure from atomistic
+    simulation data, such as Steinhardt parameters, common neighbor analysis,
+    Voronoi tessellation and many more. It works on ASE Atoms objects. The
+    calculations run in C++ on all CPU cores, with Python bindings through
+    pybind11. It includes the C++ core of matscipy-neighbours (MIT) for the
+    neighbor search.
+  doc_url: https://pyscal.org
   dev_url: https://github.com/pyscal/pyscal3/
 
 extra:
